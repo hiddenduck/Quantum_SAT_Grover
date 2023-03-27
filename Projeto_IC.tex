@@ -1,0 +1,1651 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Projeto\_IC}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{concurrency-20222023}{%
+\subsubsection{Concurrency 2022/2023}\label{concurrency-20222023}}
+
+\hypertarget{quantum-computing---final-project}{%
+\subsection{Quantum Computing - Final
+Project}\label{quantum-computing---final-project}}
+
+\hypertarget{solving-satisfiability-problems-with-grovers-algorithm}{%
+\subsection{Solving satisfiability problems with Grover's
+Algorithm}\label{solving-satisfiability-problems-with-grovers-algorithm}}
+
+Trabalho realizado por:
+
+Carlos Eduardo da Silva Machado A96936
+
+Gonçalo Manuel Maia de Sousa A97485
+
+    \hypertarget{descriuxe7uxe3o-do-problema}{%
+\subsection{Descrição do Problema}\label{descriuxe7uxe3o-do-problema}}
+
+    O algoritmo de Grover é considerado um dos mais poderosos algoritmos
+quânticos, pois oferece uma melhoria quadrática
+(\(\mathcal{O}(\sqrt{N})\)) em relação aos algoritmos clássicos
+(\(\mathcal{O}(N)\)), quando falamos em procuras não estruturadas. Mas
+podemos generalizar este algoritmo para outros problemas como o problema
+de satisfazibilidade que procuramos resolver neste trabalho.
+
+Queremos, portanto, resolver o problema de satisfazibilidade através do
+algoritmo de Grover, para tal, vamos: 1. Criar uma fórmula 3-SAT
+solucionável; 2. Implementar o algoritmo de Grover de forma a resolver o
+problema; 3. Avaliar a qualidade da solução obtida pelo algoritmo; 4.
+Estudar a complexidade associada ao algoritmo aplicado ao problema.
+
+    \hypertarget{resoluuxe7uxe3o-do-problema}{%
+\subsection{Resolução do Problema}\label{resoluuxe7uxe3o-do-problema}}
+
+    \hypertarget{desenvolvimento-de-uma-formula-3-sat-solucionuxe1vel}{%
+\subparagraph{Desenvolvimento de uma formula 3-SAT
+solucionável}\label{desenvolvimento-de-uma-formula-3-sat-solucionuxe1vel}}
+
+    Uma fórmula 3-SAT é composta por um ou mais clausulas que são
+constitúidas por exatamente 3 literais, sendo assim, um exemplo para uma
+fórmula 3-SAT seria
+\(f(v_1,v_2,v_3) = (\neg v_1 \lor v_2 \lor v_3) \land (v_1 \lor \neg v_2 \lor v_3)\).
+
+f1 = \((\neg v_1 \lor v_2 \lor v_3)\)
+
+f2 = \((v_1 \lor \neg v_2 \lor v_3)\)
+
+A tabela de verdade para esta fórmula exemplo será:
+
+\begin{longtable}[]{@{}cccccc@{}}
+\toprule
+v1 & v2 & v3 & f1 & f2 & f\tabularnewline
+\midrule
+\endhead
+0 & 0 & 0 & 1 & 1 & 1\tabularnewline
+0 & 0 & 1 & 1 & 1 & 1\tabularnewline
+0 & 1 & 0 & 1 & 0 & 0\tabularnewline
+0 & 1 & 1 & 1 & 1 & 1\tabularnewline
+1 & 0 & 0 & 0 & 1 & 0\tabularnewline
+1 & 0 & 1 & 1 & 1 & 1\tabularnewline
+1 & 1 & 0 & 1 & 1 & 1\tabularnewline
+1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+\bottomrule
+\end{longtable}
+
+Neste exemplo, temos uma fórmula 3-SAT com mais de uma solução.
+
+Vamos procurar por uma fórmula 3-SAT com apenas uma solução, por isso,
+pegamos na fórmula exemplo e acrescentamos algumas clausulas de forma a
+termos apenas uma solução:
+
+\[f(v_1,v_2,v_3) = (\neg v_1 \lor v_2 \lor v_3) \land (v_1 \lor \neg v_2 \lor v_3) \land (v_1 \lor v_2 \lor v_3) \land (v_1 \lor \neg v_2 \lor \neg v_3) \land (\neg v_1 \lor v_2 \lor \neg v_3) \land (\neg v_1 \lor \neg v_2 \lor v_3) \land (\neg v_1 \lor \neg v_2 \lor \neg v_3)\]
+
+\[
+f1 = (\neg v_1 \lor v_2 \lor v_3) \\
+f2 = (v_1 \lor \neg v_2 \lor v_3) \\
+f3 = (v_1 \lor v_2 \lor v_3) \\
+f4 = (v_1 \lor \neg v_2 \lor \neg v_3) \\
+f5 = (\neg v_1 \lor v_2 \lor \neg v_3) \\
+f6 = (\neg v_1 \lor \neg v_2 \lor v_3) \\
+f7 = (\neg v_1 \lor \neg v_2 \lor \neg v_3)
+\]
+
+Deste modo, a nova tabela de verdade será:
+
+\begin{longtable}[]{@{}ccccccccccc@{}}
+\toprule
+v1 & v2 & v3 & f1 & f2 & f3 & f4 & f5 & f6 & f7 & f\tabularnewline
+\midrule
+\endhead
+0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 0\tabularnewline
+0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\tabularnewline
+0 & 1 & 0 & 1 & 0 & 1 & 1 & 1 & 1 & 1 & 0\tabularnewline
+0 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 0\tabularnewline
+1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\tabularnewline
+1 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 0\tabularnewline
+1 & 1 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 0\tabularnewline
+1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 0\tabularnewline
+\bottomrule
+\end{longtable}
+
+    Importar as bibliotecas necessárias
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{qiskit} \PY{k+kn}{import} \PY{n}{QuantumCircuit}\PY{p}{,} \PY{n}{ClassicalRegister}\PY{p}{,} \PY{n}{QuantumRegister}\PY{p}{,} \PY{n}{Aer}\PY{p}{,} \PY{n}{execute}
+\PY{k+kn}{from} \PY{n+nn}{qiskit}\PY{n+nn}{.}\PY{n+nn}{tools}\PY{n+nn}{.}\PY{n+nn}{visualization} \PY{k+kn}{import} \PY{n}{plot\PYZus{}histogram}\PY{p}{,} \PY{n}{plot\PYZus{}distribution}
+\PY{k+kn}{from} \PY{n+nn}{qiskit}\PY{n+nn}{.}\PY{n+nn}{circuit}\PY{n+nn}{.}\PY{n+nn}{library} \PY{k+kn}{import} \PY{n}{ZGate}\PY{p}{,} \PY{n}{MCXGate}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Função disponibilizada nas fichas práticas
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{execute\PYZus{}circuit}\PY{p}{(}\PY{n}{qc}\PY{p}{,} \PY{n}{shots}\PY{o}{=}\PY{l+m+mi}{1024}\PY{p}{,} \PY{n}{device}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qasm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{decimal}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n+nb}{reversed}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{p}{:}
+    
+    \PY{c+c1}{\PYZsh{}define backend}
+    \PY{k}{if} \PY{n}{device} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{qasm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+        \PY{n}{device} \PY{o}{=} \PY{n}{Aer}\PY{o}{.}\PY{n}{get\PYZus{}backend}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{qasm\PYZus{}simulator}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{}get counts}
+        \PY{n}{counts} \PY{o}{=} \PY{n}{execute}\PY{p}{(}\PY{n}{qc}\PY{p}{,} \PY{n}{device}\PY{p}{,} \PY{n}{shots}\PY{o}{=}\PY{n}{shots}\PY{p}{)}\PY{o}{.}\PY{n}{result}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+        
+        \PY{k}{if} \PY{n}{decimal}\PY{p}{:}
+            \PY{k}{if} \PY{n+nb}{reversed}\PY{p}{:}
+                \PY{n}{counts} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{a}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{k}{for} \PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{o+ow}{in} \PY{n}{counts}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+            \PY{k}{else}\PY{p}{:}
+                \PY{n}{counts} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{k}{for} \PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{o+ow}{in} \PY{n}{counts}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{k}{if} \PY{n+nb}{reversed}\PY{p}{:}
+                \PY{n}{counts} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{(}\PY{n}{a}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{k}{for} \PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{o+ow}{in} \PY{n}{counts}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+            \PY{k}{else}\PY{p}{:}
+                \PY{n}{counts} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{k}{for} \PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)} \PY{o+ow}{in} \PY{n}{counts}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+
+        \PY{k}{return} \PY{n}{counts}
+    
+    \PY{k}{elif} \PY{n}{device}\PY{o}{==}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{statevector}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+        \PY{n}{device} \PY{o}{=} \PY{n}{Aer}\PY{o}{.}\PY{n}{get\PYZus{}backend}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{statevector\PYZus{}simulator}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{state\PYZus{}vector} \PY{o}{=} \PY{n}{execute}\PY{p}{(}\PY{n}{qc}\PY{p}{,} \PY{n}{device}\PY{p}{)}\PY{o}{.}\PY{n}{result}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{get\PYZus{}statevector}\PY{p}{(}\PY{p}{)}
+
+        \PY{k}{return} \PY{n}{state\PYZus{}vector}
+\end{Verbatim}
+\end{tcolorbox}
+
+    O algoritmo de Grover é constituído por 3 fases: - Sobreposição uniforme
+dos elementos da base de dados - Oŕaculo, marcamos a solução que
+pretendemos encontrar - Operador de difusão que aumenta a probabilidade
+de encontrarmos a solução
+
+    Função oráculo cujo objetivo é marcar a solução:
+
+Para tal foi utilizado o gate `MCXGate'que, aplica um gate 'X' às
+variaveis lógicas que devem ser 0 para uma determinada solução
+codificada pela `bitstring', marca a solução através de um
+\emph{Multi-control Tofilli}, que se ativado realiza \emph{kick Back} da
+fase da `ancilla'.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{oracle}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{ancilla}\PY{p}{,} \PY{n}{bitstring}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+    \PY{n}{qc} \PY{o}{=} \PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{ancilla}\PY{p}{)}
+    \PY{n}{cx\PYZus{}gate} \PY{o}{=} \PY{n}{MCXGate}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{qr}\PY{p}{)}\PY{p}{,}\PY{n}{ctrl\PYZus{}state}\PY{o}{=}\PY{n}{bitstring}\PY{p}{)}
+    \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{cx\PYZus{}gate}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{barrier}\PY{p}{(}\PY{p}{)}
+    \PY{k}{return} \PY{n}{qc}
+\end{Verbatim}
+\end{tcolorbox}
+
+    O difusor procura aumentar a amplitude da solução, para tal é desfeita a
+sobreposição e aplicado um gate `x' a todos os qubits de forma a agir
+apenas sobre o vetor \(|0 \rangle\). Posteriormente a fase é trocada e o
+estado é reposto.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{diffusion\PYZus{}operator}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{ancilla}\PY{p}{,} \PY{n}{n\PYZus{}qubits}\PY{p}{)}\PY{p}{:}
+
+    \PY{n}{qc} \PY{o}{=} \PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{ancilla}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{qr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{n}{cz} \PY{o}{=} \PY{n}{ZGate}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{control}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ctrl\PYZus{}state}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{0}\PY{l+s+s2}{\PYZdq{}}\PY{o}{*}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{cz}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{qr}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{barrier}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{qc} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    Função principal que prepara os qubits que representam os elementos numa
+base de dados e o qubit ancilla e cria o circuito quantico
+correspondente ao algoritmo de Grover:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{grover}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{bitstring}\PY{p}{)}\PY{p}{:}
+    \PY{n}{qr} \PY{o}{=} \PY{n}{QuantumRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Literal}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{cr} \PY{o}{=} \PY{n}{ClassicalRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{)}
+    \PY{n}{ancilla} \PY{o}{=} \PY{n}{QuantumRegister}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ancilla}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    
+    \PY{n}{qc} \PY{o}{=} \PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{ancilla}\PY{p}{,}\PY{n}{cr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{qr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    
+    \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{oracle}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{ancilla}\PY{p}{,} \PY{n}{bitstring}\PY{o}{=}\PY{n}{bitstring}\PY{p}{)}\PY{p}{)}
+    \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{diffusion\PYZus{}operator}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{ancilla}\PY{p}{,} \PY{n}{n\PYZus{}qubits}\PY{p}{)}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{barrier}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{qc}\PY{o}{.}\PY{n}{draw}\PY{p}{(}\PY{n}{output}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mpl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Para executar o algoritmo é necessário inicializar o circuito.
+
+Para tal são criados três qubits para as variaveis lógicas e um bit
+auxiliar, `ancilla' para a facilitar a marcação das fases.
+
+Inicialmente os qubits das variáveis são colocados em sobreposição por
+meio de um gate `Hadamard' e a ancilla é negada.
+
+O segundo passo na execução do algoritmo envolve calcular o numero
+optimo de iterações e a aplicação do oráculo e difusor.
+
+A explicação do número ``óptimo'' de iterações ficará para a secção da
+complexidade.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{bitstring}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{i} \PY{o}{=} \PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+    \PY{n}{qr}\PY{o}{=}\PY{n}{QuantumRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Literal}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ancilla}\PY{o}{=}\PY{n}{QuantumRegister}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ancilla}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{cr}\PY{o}{=}\PY{n}{ClassicalRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{)}
+    
+    \PY{n}{qc} \PY{o}{=} \PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{ancilla}\PY{p}{,}\PY{n}{cr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{qr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    
+    \PY{n}{elements} \PY{o}{=} \PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{n}{n\PYZus{}qubits}
+    \PY{k}{if} \PY{n}{i} \PY{o}{==} \PY{k+kc}{None}\PY{p}{:}
+        \PY{n}{iterations}\PY{o}{=}\PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{o}{/}\PY{l+m+mi}{4} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{elements}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{iterations} \PY{o}{=} \PY{n}{i}
+    
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{iterations}\PY{p}{)}\PY{p}{:}
+        \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{oracle}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{ancilla}\PY{p}{,}\PY{n}{bitstring}\PY{o}{=}\PY{n}{bitstring}\PY{p}{)}\PY{p}{)}
+        \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{diffusion\PYZus{}operator}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{ancilla}\PY{p}{,}\PY{n}{n\PYZus{}qubits}\PY{p}{)}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{measure}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{cr}\PY{p}{)}
+    
+    \PY{k}{if}\PY{p}{(}\PY{n}{mpl}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n}{qc}\PY{o}{.}\PY{n}{draw}\PY{p}{(}\PY{n}{output}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mpl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{counts} \PY{o}{=} \PY{n}{execute\PYZus{}circuit}\PY{p}{(}\PY{n}{qc}\PY{p}{,} \PY{n}{shots}\PY{o}{=}\PY{l+m+mi}{1024}\PY{p}{,} \PY{n+nb}{reversed}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+        \PY{k}{return} \PY{n}{plot\PYZus{}distribution}\PY{p}{(}\PY{n}{counts}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{n\PYZus{}qubits} \PY{o}{=} \PY{l+m+mi}{3}
+\PY{n}{bitstring} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{010}\PY{l+s+s2}{\PYZdq{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{grover}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{n}{bitstring}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{8}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_20_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{n}{bitstring}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{9}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_21_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{n}{bitstring}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{10}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_22_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Para mais do que uma solução:
+
+Para calcular a complexidade temos de ter em consideração o número de
+soluções, e portanto, teremos O(\(\sqrt(N/M))\). Para N igual ao número
+de elementos e M igual ao número de soluções.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{optimalIterationsMultipleSols}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{solutions}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{shots} \PY{o}{=} \PY{l+m+mi}{1024}\PY{p}{)}\PY{p}{:}
+    \PY{n}{qr}\PY{o}{=}\PY{n}{QuantumRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Literal}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ancilla}\PY{o}{=}\PY{n}{QuantumRegister}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ancilla}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{cr}\PY{o}{=}\PY{n}{ClassicalRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{)}
+
+    \PY{n}{qc} \PY{o}{=}\PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{ancilla}\PY{p}{,}\PY{n}{cr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{qr}\PY{p}{)}
+
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+
+
+    \PY{n}{elements} \PY{o}{=} \PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{n}{n\PYZus{}qubits}
+
+    \PY{n}{iterations}\PY{o}{=}\PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{o}{/}\PY{l+m+mi}{4} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{elements}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{solutions}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{iterations}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{solution} \PY{o+ow}{in} \PY{n}{solutions}\PY{p}{:}
+            \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{oracle}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{ancilla}\PY{p}{,}\PY{n}{bitstring}\PY{o}{=}\PY{n}{solution}\PY{p}{)}\PY{p}{)}
+        \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{diffusion\PYZus{}operator}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{ancilla}\PY{p}{,}\PY{n}{n\PYZus{}qubits}\PY{p}{)}\PY{p}{)}
+    
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{measure}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{cr}\PY{p}{)}
+    
+    \PY{k}{if} \PY{n}{mpl}\PY{p}{:}
+        \PY{k}{return} \PY{n}{qc}\PY{o}{.}\PY{n}{draw}\PY{p}{(}\PY{n}{output}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mpl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{counts} \PY{o}{=} \PY{n}{execute\PYZus{}circuit}\PY{p}{(}\PY{n}{qc}\PY{p}{,} \PY{n}{shots}\PY{o}{=}\PY{n}{shots}\PY{p}{,} \PY{n+nb}{reversed}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+        \PY{k}{return} \PY{n}{plot\PYZus{}distribution}\PY{p}{(}\PY{n}{counts}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{solutions} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{100}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{000}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\PY{n}{n\PYZus{}qubits} \PY{o}{=} \PY{l+m+mi}{3}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterationsMultipleSols}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{solutions}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{13}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_26_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    No de caso de duas soluções, temos a certeza de que vamos obter uma da
+soluções.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterationsMultipleSols}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{solutions}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{14}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_28_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Podemos, inclusive, escolher uma delas aleatoriamente, reduzindo o
+número de \emph{shots} para 1:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterationsMultipleSols}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{solutions}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{shots} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{15}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_30_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Para três soluções, voltamos a ter alguma probabilidade de obter uma não
+solução.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{solutions} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{100}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{000}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{111}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\PY{n}{n\PYZus{}qubits} \PY{o}{=} \PY{l+m+mi}{3}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterationsMultipleSols}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{solutions}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{17}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    A partir da metade das soluções, o algoritmo não é ``útil'' no sentido
+em que temos um grande número de soluções.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{solutions} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{100}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{000}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{111}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{010}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\PY{n}{n\PYZus{}qubits} \PY{o}{=} \PY{l+m+mi}{3}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterationsMultipleSols}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{solutions}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{19}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_36_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \hypertarget{anuxe1lise-da-qualidade-da-soluuxe7uxe3o.}{%
+\subsection{Análise da qualidade da
+solução.}\label{anuxe1lise-da-qualidade-da-soluuxe7uxe3o.}}
+
+Nesta secção iremos abordar a qualidade da solução de cada um dos
+exemplos anteriores. Acrescentando alguns testes.
+
+Para o caso de uma solução obtivemos uma boa distrubuíção, apesar de não
+ser 100\%. Vamos análisar para bitstring = ``010''.
+
+Para o número ``ótimo'' de iterações é
+\(\lfloor \pi/4 * \sqrt 8 \rfloor\), ou seja, 2.
+
+Podemos comprovar que vamos obter uma probabilidade similiar para o
+mesmo número de \emph{shots}:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{010}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{20}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_38_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{010}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{i}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{21}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_39_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Se tivessemos menos iterações teriamos uma menor probabilidade de
+encontrar a solução e uma maior probabilidade de encontrar uma não
+solução:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{010}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{i}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{22}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_41_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Se iterassemos mais uma vez do que o número ideal, teríamos o efeito
+contrário, geometricamente, isto acontece porque o vetor ``roda'' para
+além do eixo:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{010}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{i}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{23}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_43_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{010}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{i}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{24}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_44_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{010}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{i}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{25}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_45_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Para mais do que uma solução, a ideia das iterações é igual, porém temos
+de ter em conta que a solução não é única.
+
+No caso de duas soluções, temos a garantia de ter uma das duas, como
+visto no gráfico exemplo. Conseguimos generalizar esse facto, através de
+\((2j+1)\arcsin(\sqrt(M/N))\), sendo j o número de iterações, M o número
+de soluções e N o número de elementos. Para termos solução certa,
+\((2j+1)\arcsin(\sqrt(M/N))\) tem que ser igual a \(\pi/2\), para tal
+precisamos que \(\arcsin(\sqrt(M/N))\) seja \(\pi/6\), isso apenas
+acontece quando M/N = 1/4, ou seja, M = N/4. Desse modo o número de
+iterações será sempre 1, pois \(\lfloor \pi/4 * \sqrt(4)\rfloor\) que é
+igual a 1. Assim para 5 qubits temos N = 2⁵ = 32 e M = 32/4 = 8.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{optimalIterationsMultipleSols}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{10000}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{00000}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{11111}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{01000}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{00100}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{00010}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{00001}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{11000}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{26}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_47_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Para M \textgreater= N/2, como visto no caso de metade soluções não
+funciona Para exatamente M = N/2,
+\(\lfloor \pi/4 * \sqrt(N/(N/2))\rfloor\), ou seja,
+\(\lfloor \pi/4 * \sqrt(2)\rfloor\) que é igual a 0, ou seja, não
+conseguimos iterar nenhuma vez. Para M\textgreater N/2, a raiz quadrada
+de N/M será sempre menor que \(\sqrt(2)\), e por isso, o número de
+iterações vai dar sempre 0.
+
+    \hypertarget{complexidade}{%
+\subsection{Complexidade}\label{complexidade}}
+
+De forma a maximizar a probabilidade de encontrarmos a solução correta,
+criamos uma função que aplica a segunda e terceira fase do algoritmo de
+grover um número de vezes ``ótimo'', isto é, se aplicarmos poucas vezes
+não obtemos a melhor precisão, porém se aplicarmos a mais do que o
+necessário, obtemos o efeito contrário do que desejamos pois vamos
+passar da solução que fica geometricamente no ângulo \(\pi\)/2.
+
+A fórmula pode ser dada como:
+\(\psi = \cos(\theta + 2\theta)|w\rangle + \sin(\theta + 2\theta)|\overline w\rangle\)
+
+Onde \textbar w\(\rangle\) é a solução e \(|\overline w\rangle\) são as
+não soluções.
+
+Ora se queremos aplicar um número de vezes, k, então:
+\(\cos((2*k+1)*\theta)|w\rangle + \sin((2*k+1)*\theta)|\overline w\rangle\)
+
+Sabemos que \(\sin²((2k+1)*\theta)\) é aproximadamente 1 logo (2k+1)
+\(\theta\) é aproximadamente \(\arcsin(1)\)
+
+Logo k será, aproximadamente, \(\arcsin(1)/2\theta - 1/2\), ou seja,
+\$\lfloor \pi/4 * \sqrt{2^n} \rfloor \$, com
+\(\sin(\theta) = 1/\sqrt{2^n}\) e por isso,
+\(\theta = \arcsin1/\sqrt{2^n}\)
+
+O algoritmo de Grover aqui implementado depende principalmente de um par
+de fatores, o número de elementos no universo de procura, que chamamos N
+e o número de soluções, que chamamos M.
+
+Para uma solução, a complexidade do algoritmo é \(O(\sqrt{N})\).
+
+Sendo N = 2\^{}n.
+
+A solução pode ser interpretada como um vetor cujo angulo inicial é
+\(sin^{-1}(\sqrt{\frac{M}{N}})\) que chamaremos \(\alpha\).
+
+O ângulo do vetor após uma iteração do oráculo e difusor é
+\(2\alpha + \alpha\).
+
+Assim tomando \(i\) como o número de iterações óptimas, basta resolver
+\(i\), tal que: \[
+(2\theta*k + \theta) \approx \frac{\pi}{2}
+\] Temos então que
+\(i = \lfloor \frac{\pi}{4}\sqrt{\frac{N}{M}}\rfloor\)
+
+Então a complexidade do algoritmo é \(O(\sqrt{\frac{N}{M}})\)
+
+    \hypertarget{outras-resoluuxe7uxf5es}{%
+\subsection{Outras Resoluções}\label{outras-resoluuxe7uxf5es}}
+
+    No site https://qiskit.org/textbook/ch-algorithms/grover.html dado nas
+referencias do enunciado, o algoritmo de Grover é utilizado para
+resolver o Sudoku sem saber à partida a solução. Com essa inspiração,
+resolvemos implementar uma alternativa ao problema, em que não sabemos a
+solução da fórmula 3-SAT.
+
+Vamos reutilizar a fórmula f acima criada:
+
+\[f(v_1,v_2,v_3) = (\neg v_1 \lor v_2 \lor v_3) \land (v_1 \lor \neg v_2 \lor v_3) \land (v_1 \lor v_2 \lor v_3) \land (v_1 \lor \neg v_2 \lor \neg v_3) \land (\neg v_1 \lor v_2 \lor \neg v_3) \land (\neg v_1 \lor \neg v_2 \lor v_3) \land (\neg v_1 \lor \neg v_2 \lor \neg v_3)\]
+
+\[
+f1 = (\neg v_1 \lor v_2 \lor v_3) \\
+f2 = (v_1 \lor \neg v_2 \lor v_3) \\
+f3 = (v_1 \lor v_2 \lor v_3) \\
+f4 = (v_1 \lor \neg v_2 \lor \neg v_3) \\
+f5 = (\neg v_1 \lor v_2 \lor \neg v_3) \\
+f6 = (\neg v_1 \lor \neg v_2 \lor v_3) \\
+f7 = (\neg v_1 \lor \neg v_2 \lor \neg v_3)
+\]
+
+Como não existe propriamente um operador ou, nós definimos esse \(\lor\)
+através dos operador unário \(\neg\) e o operador binário \(\land\),
+isso é possível, pois \{\(\land\), \(\neg\)\} é um conjunto completo de
+conetivos e, portanto, conseguimos obter o \(\lor\) através deles. Desse
+modo, aplicamos a lei de De Morgan para remover os operadores \(\lor\)
+de cada cláusula.
+
+\[f(v_1,v_2,v_3) = \neg(v_1 \land \neg v_2 \land \neg v_3) \land \neg (\neg v_1 \land v_2 \land \neg v_3) \land \neg (\neg v_1 \land \neg v_2 \land v_3) \land \neg (\neg v_1 \land v_2 \land v_3) \land \neg (v_1 \land \neg v_2 \land v_3) \land \neg (v_1 \land v_2 \land \neg v_3) \land \neg (v_1 \land v_2 \land v_3)\]
+
+\[
+f1 = \neg (v_1 \land \neg v_2 \land \neg v_3) \\
+f2 = \neg (\neg v_1 \land v_2 \land \neg v_3) \\
+f3 = \neg (\neg v_1 \land \neg v_2 \land v_3) \\
+f4 = \neg (\neg v_1 \land v_2 \land v_3) \\
+f5 = \neg (v_1 \land \neg v_2 \land v_3) \\
+f6 = \neg (v_1 \land v_2 \land \neg v_3) \\
+f7 = \neg (v_1 \land v_2 \land v_3)
+\]
+
+    A Função oráculo foi construída de forma a marcar a solução pretendida,
+ou seja, a solução ``001''.
+
+A construção do oráculo é feita de acordo com a fórmula f, cada qubit
+``clausula'' simboliza realmente cada cláusula da fórumula 3-SAT. Dessa
+forma, como os qubits começam no estado \(|0\rangle\), e, portanto,
+negamos cada qubit ``literal'' antes e depois da \emph{multi-controled X
+gate} caso ele esteja negado na fórmula. Depois de aplicar a mcx,
+negamos o resultado, pois todas as cláusulas estão negadas, fazemos isso
+para todas elas. No final, o resultado vai ser determinado através de
+novamente uma mcx cujo target é a ancilla. Se todos os qubits
+``clausula'' estiverem no estado \(|1\rangle\), a gate é aplicada e
+acontece o \emph{phase kick back}.
+
+É também importante realçar que fazemos \emph{Decomputing}, isto é,
+repetimos as operações que fizemos nos qubits para voltar a po-los no
+estado inicial, uma vez que os qubits das clausulas são qubits
+auxiliares, podendo ser usados por outras funções.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{SAT\PYZus{}Oracle}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{clausulas}\PY{p}{,} \PY{n}{ancilla}\PY{p}{)}\PY{p}{:}
+        
+    \PY{n}{qc} \PY{o}{=} \PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{clausulas}\PY{p}{,} \PY{n}{ancilla}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{}f1}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f2}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f3}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f4}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f5}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f6}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)} 
+
+    \PY{c+c1}{\PYZsh{}f7}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{clausulas}\PY{p}{,}\PY{n}{ancilla}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f1}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f2}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f3}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f4}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f5}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f6}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)} 
+
+    \PY{c+c1}{\PYZsh{}f7}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+
+    \PY{n}{qc}\PY{o}{.}\PY{n}{barrier}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{qc}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Esta função é extremamente parecida à anterior, apenas trocamos uma das
+cláusulas para ter uma solução diferente, que será ``000''.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{SAT\PYZus{}Oracle1}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{clausulas}\PY{p}{,} \PY{n}{ancilla}\PY{p}{)}\PY{p}{:}
+    
+    \PY{n}{qc} \PY{o}{=} \PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{,} \PY{n}{ancilla}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{}f1}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f2}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f3}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f4}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f5}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f6}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)} 
+
+    \PY{c+c1}{\PYZsh{}f7}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{clausulas}\PY{p}{,}\PY{n}{ancilla}\PY{p}{)}
+    
+        \PY{c+c1}{\PYZsh{}f1}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f2}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f3}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f4}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f5}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}f6}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{qr}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)} 
+
+    \PY{c+c1}{\PYZsh{}f7}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{mcx}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{clausulas}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+
+    \PY{n}{qc}\PY{o}{.}\PY{n}{barrier}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{qc}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A função que realiza o algoritmo é parecida à da outra resolução, apenas
+realçando o facto de termos qubits auxiliares.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{SAT\PYZus{}Grover}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{n}{n\PYZus{}clausulas}\PY{p}{)}\PY{p}{:}
+    \PY{n}{qr} \PY{o}{=} \PY{n}{QuantumRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Literal}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{cr} \PY{o}{=} \PY{n}{ClassicalRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{)}
+    \PY{n}{clausulas} \PY{o}{=} \PY{n}{QuantumRegister}\PY{p}{(}\PY{n}{n\PYZus{}clausulas}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Clausula}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ancilla} \PY{o}{=} \PY{n}{QuantumRegister}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ancilla}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    
+    \PY{n}{qc} \PY{o}{=} \PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{,} \PY{n}{ancilla}\PY{p}{,}\PY{n}{cr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{qr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    
+    \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{SAT\PYZus{}Oracle1}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{clausulas}\PY{p}{,} \PY{n}{ancilla}\PY{p}{)}\PY{p}{)}
+    \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{diffusion\PYZus{}operator}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{ancilla}\PY{p}{,} \PY{n}{n\PYZus{}qubits}\PY{p}{)}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{barrier}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{qc}\PY{o}{.}\PY{n}{draw}\PY{p}{(}\PY{n}{output}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mpl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{SAT\PYZus{}Grover}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{30}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Função usual que itera o algoritmo com o número idela de iterações.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{SAT\PYZus{}optimalIterations}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,}\PY{n}{n\PYZus{}clausulas}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{oracle}\PY{o}{=}\PY{n}{SAT\PYZus{}Oracle}\PY{p}{)}\PY{p}{:}
+    \PY{n}{qr} \PY{o}{=} \PY{n}{QuantumRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Literal}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{cr} \PY{o}{=} \PY{n}{ClassicalRegister}\PY{p}{(}\PY{n}{n\PYZus{}qubits}\PY{p}{)}
+    \PY{n}{clausulas} \PY{o}{=} \PY{n}{QuantumRegister}\PY{p}{(}\PY{n}{n\PYZus{}clausulas}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Clausula}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ancilla} \PY{o}{=} \PY{n}{QuantumRegister}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ancilla}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    
+    \PY{n}{qc} \PY{o}{=} \PY{n}{QuantumCircuit}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{clausulas}\PY{p}{,} \PY{n}{ancilla}\PY{p}{,}\PY{n}{cr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{qr}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{x}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    \PY{n}{qc}\PY{o}{.}\PY{n}{h}\PY{p}{(}\PY{n}{ancilla}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{barrier}\PY{p}{(}\PY{p}{)}
+    
+    \PY{n}{elements} \PY{o}{=} \PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{n}{n\PYZus{}qubits}
+    \PY{n}{iterations}\PY{o}{=}\PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{o}{/}\PY{l+m+mi}{4} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{elements}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{iterations}\PY{p}{)}\PY{p}{:}
+        \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{oracle}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{clausulas}\PY{p}{,} \PY{n}{ancilla}\PY{p}{)}\PY{p}{)}
+        \PY{n}{qc} \PY{o}{=} \PY{n}{qc}\PY{o}{.}\PY{n}{compose}\PY{p}{(}\PY{n}{diffusion\PYZus{}operator}\PY{p}{(}\PY{n}{qr}\PY{p}{,} \PY{n}{ancilla}\PY{p}{,} \PY{n}{n\PYZus{}qubits}\PY{p}{)}\PY{p}{)}
+    
+    \PY{n}{qc}\PY{o}{.}\PY{n}{measure}\PY{p}{(}\PY{n}{qr}\PY{p}{,}\PY{n}{cr}\PY{p}{)}
+    
+    \PY{k}{if}\PY{p}{(}\PY{n}{mpl}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n}{qc}\PY{o}{.}\PY{n}{draw}\PY{p}{(}\PY{n}{output}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mpl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{counts} \PY{o}{=} \PY{n}{execute\PYZus{}circuit}\PY{p}{(}\PY{n}{qc}\PY{p}{,} \PY{n}{shots}\PY{o}{=}\PY{l+m+mi}{1024}\PY{p}{,} \PY{n+nb}{reversed}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+        \PY{k}{return} \PY{n}{plot\PYZus{}distribution}\PY{p}{(}\PY{n}{counts}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{SAT\PYZus{}optimalIterations}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{32}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_61_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{SAT\PYZus{}optimalIterations}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{33}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_62_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{SAT\PYZus{}optimalIterations}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{,} \PY{n}{mpl}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{oracle}\PY{o}{=}\PY{n}{SAT\PYZus{}Oracle1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{34}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_63_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Resolver a fórmula SAT através do \emph{Qiskit Aqua}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{qiskit} \PY{k+kn}{import} \PY{n}{Aer}
+\PY{k+kn}{from} \PY{n+nn}{qiskit}\PY{n+nn}{.}\PY{n+nn}{visualization} \PY{k+kn}{import} \PY{n}{plot\PYZus{}histogram}
+\PY{k+kn}{from} \PY{n+nn}{qiskit}\PY{n+nn}{.}\PY{n+nn}{utils} \PY{k+kn}{import} \PY{n}{QuantumInstance}
+\PY{k+kn}{from} \PY{n+nn}{qiskit}\PY{n+nn}{.}\PY{n+nn}{algorithms} \PY{k+kn}{import} \PY{n}{Grover}\PY{p}{,} \PY{n}{AmplificationProblem}
+\PY{k+kn}{from} \PY{n+nn}{qiskit}\PY{n+nn}{.}\PY{n+nn}{circuit}\PY{n+nn}{.}\PY{n+nn}{library} \PY{k+kn}{import} \PY{n}{PhaseOracle}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Para utilizar o \emph{Qiskit Aqua} temos de colocar a nossa fórmula no
+formato \emph{DIMACS CNF} como demonstrado no
+https://qiskit.org/textbook/ch-applications/satisfiability-grover.html
+dado pelas referências do enunciado.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{formula.dimacs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+    \PY{n}{dimacs} \PY{o}{=} \PY{n}{f}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{dimacs}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+p cnf 3 7
+-1 2 3 0
+1 -2 3 0
+1 2 3 0
+1 -2 -3 0
+-1 2 -3 0
+-1 -2 3 0
+-1 -2 -3 0
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{oracle} \PY{o}{=} \PY{n}{PhaseOracle}\PY{o}{.}\PY{n}{from\PYZus{}dimacs\PYZus{}file}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{formula.dimacs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{oracle}\PY{o}{.}\PY{n}{draw}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+q\_0: ─o─
+      │
+q\_1: ─o─
+      │
+q\_2: ─■─
+
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Verifier dado pelo Qiskit:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class} \PY{n+nc}{Verifier}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Create an object that can be used to check whether}
+\PY{l+s+sd}{    an assignment satisfies a DIMACS file.}
+\PY{l+s+sd}{        Args:}
+\PY{l+s+sd}{            dimacs\PYZus{}file (str): path to the DIMACS file}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{dimacs\PYZus{}file}\PY{p}{)}\PY{p}{:}
+        \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{dimacs\PYZus{}file}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dimacs} \PY{o}{=} \PY{n}{f}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{is\PYZus{}correct}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{guess}\PY{p}{)}\PY{p}{:}
+        \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Verifies a SAT solution against this object\PYZsq{}s}
+\PY{l+s+sd}{        DIMACS file.}
+\PY{l+s+sd}{            Args:}
+\PY{l+s+sd}{                guess (str): Assignment to be verified.}
+\PY{l+s+sd}{                             Must be string of 1s and 0s.}
+\PY{l+s+sd}{            Returns:}
+\PY{l+s+sd}{                bool: True if `guess` satisfies the}
+\PY{l+s+sd}{                           problem. False otherwise.}
+\PY{l+s+sd}{        \PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{c+c1}{\PYZsh{} Convert characters to bools \PYZam{} reverse}
+        \PY{n}{guess} \PY{o}{=} \PY{p}{[}\PY{n+nb}{bool}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{guess}\PY{p}{]}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{k}{for} \PY{n}{line} \PY{o+ow}{in} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dimacs}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{line} \PY{o}{=} \PY{n}{line}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ 0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{clause\PYZus{}eval} \PY{o}{=} \PY{k+kc}{False}
+            \PY{k}{for} \PY{n}{literal} \PY{o+ow}{in} \PY{n}{line}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+                \PY{k}{if} \PY{n}{literal} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{c}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+                    \PY{c+c1}{\PYZsh{} line is not a clause}
+                    \PY{n}{clause\PYZus{}eval} \PY{o}{=} \PY{k+kc}{True}
+                    \PY{k}{break}
+                \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{literal}\PY{p}{:}
+                    \PY{n}{literal} \PY{o}{=} \PY{n}{literal}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                    \PY{n}{lit\PYZus{}eval} \PY{o}{=} \PY{o+ow}{not} \PY{n}{guess}\PY{p}{[}\PY{n+nb}{int}\PY{p}{(}\PY{n}{literal}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+                \PY{k}{else}\PY{p}{:}
+                    \PY{n}{lit\PYZus{}eval} \PY{o}{=} \PY{n}{guess}\PY{p}{[}\PY{n+nb}{int}\PY{p}{(}\PY{n}{literal}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+                \PY{n}{clause\PYZus{}eval} \PY{o}{|}\PY{o}{=} \PY{n}{lit\PYZus{}eval}
+            \PY{k}{if} \PY{n}{clause\PYZus{}eval} \PY{o+ow}{is} \PY{k+kc}{False}\PY{p}{:}
+                \PY{k}{return} \PY{k+kc}{False}
+        \PY{k}{return} \PY{k+kc}{True}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Para verificar a correção temos de introduzir a solução ao contrário.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{v} \PY{o}{=} \PY{n}{Verifier}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{formula.dimacs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   
+\PY{n}{v}\PY{o}{.}\PY{n}{is\PYZus{}correct}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+True
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Configure backend}
+\PY{n}{backend} \PY{o}{=} \PY{n}{Aer}\PY{o}{.}\PY{n}{get\PYZus{}backend}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{aer\PYZus{}simulator}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{quantum\PYZus{}instance} \PY{o}{=} \PY{n}{QuantumInstance}\PY{p}{(}\PY{n}{backend}\PY{p}{,} \PY{n}{shots}\PY{o}{=}\PY{l+m+mi}{1024}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Create a new problem from the phase oracle and the}
+\PY{c+c1}{\PYZsh{} verification function}
+\PY{n}{problem} \PY{o}{=} \PY{n}{AmplificationProblem}\PY{p}{(}\PY{n}{oracle}\PY{o}{=}\PY{n}{oracle}\PY{p}{,} \PY{n}{is\PYZus{}good\PYZus{}state}\PY{o}{=}\PY{n}{v}\PY{o}{.}\PY{n}{is\PYZus{}correct}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Use Grover\PYZsq{}s algorithm to solve the problem}
+\PY{n}{grover} \PY{o}{=} \PY{n}{Grover}\PY{p}{(}\PY{n}{quantum\PYZus{}instance}\PY{o}{=}\PY{n}{quantum\PYZus{}instance}\PY{p}{)}
+\PY{n}{result} \PY{o}{=} \PY{n}{grover}\PY{o}{.}\PY{n}{amplify}\PY{p}{(}\PY{n}{problem}\PY{p}{)}
+\PY{n}{result}\PY{o}{.}\PY{n}{top\PYZus{}measurement}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'100'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plot\PYZus{}histogram}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{circuit\PYZus{}results}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{55}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_74_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    Com o \emph{Qiskit Aqua}, conseguimos observar que a solução que
+procuravamos(``001'', no \emph{Aqua} está invertida), tal como na nossa
+resolução.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
