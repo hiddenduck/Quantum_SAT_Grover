@@ -11,4 +11,6 @@ To run the code, you need to have Qiskit installed. You can install Qiskit using
 
 pip install qiskit
 
+# More Information
+
 For more information, you can acess the Jupyter Notebook with detailed analysis and visualizations of the results.
